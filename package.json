@@ -1,0 +1,35 @@
+{
+  "name": "jwt-graph-auth",
+  "version": "1.0.0",
+  "description": "GraphQL Server that uses JWT for authentication. Starter pack for larger projects.",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon",
+    "build": "MODE=production webpack --config webpack.config.js",
+    "build:dev": "MODE=development webpack --config webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/triethyl/jwt-graph-auth.git"
+  },
+  "keywords": [
+    "jwt",
+    "graphql",
+    "authentication",
+    "starter"
+  ],
+  "author": "Sandipan Dey",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/triethyl/jwt-graph-auth/issues"
+  },
+  "homepage": "https://github.com/triethyl/jwt-graph-auth#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "ts-loader": "^7.0.5",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
+  }
+}
