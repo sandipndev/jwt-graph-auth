@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/triethyl/jwt-graph-auth#readme",
   "devDependencies": {
+    "@types/node": "^14.0.6",
     "nodemon": "^2.0.4",
     "ts-loader": "^7.0.5",
     "ts-node": "^8.10.2",
