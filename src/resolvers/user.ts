@@ -9,6 +9,8 @@ import {
 } from "type-graphql";
 import { User } from "../models";
 
+import { AuthenticationError } from "apollo-server-express";
+
 @ObjectType()
 class UserType {
   @Field(() => ID)
@@ -39,6 +41,17 @@ export class UserResolver {
       email,
       password,
     });
-    return await user.save();
+    return user;
+  }
+
+  @Mutation(() => Boolean)
+  async login(@Arg("email") email: string, @Arg("password") password: string) {
+    const user = await User.findOne({ email });
+    if (!user) throw new AuthenticationError("Could not find User");
+
+    const valid = await user.comparePassword(password);
+    if (!valid) throw new AuthenticationError("Bad Password");
+
+    return true;
   }
 }
