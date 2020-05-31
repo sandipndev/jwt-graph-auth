@@ -10,6 +10,9 @@ export const {
   DB_PORT = 27017,
   DB_NAME = "jwt-test",
   DB_AUTHSOURCE = "jwt-test", // Authentication Database
+
+  // BCRYPT SALT WORK - Crypto
+  SALT_WORK_FACTOR = 10,
 } = process.env;
 
 // Computed

@@ -1,8 +1,11 @@
 import mongoose from "mongoose";
 import express from "express";
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
+import { buildSchema } from "type-graphql";
+import "reflect-metadata";
 
 import { MONGODB_URL, APP_PORT } from "./config";
+import { UserResolver } from "./resolvers";
 
 (async () => {
   await mongoose.connect(MONGODB_URL, {
@@ -13,16 +16,9 @@ import { MONGODB_URL, APP_PORT } from "./config";
   const app = express();
 
   const apolloServer = new ApolloServer({
-    typeDefs: gql`
-      type Query {
-        hello: String!
-      }
-    `,
-    resolvers: {
-      Query: {
-        hello: () => "hi",
-      },
-    },
+    schema: await buildSchema({
+      resolvers: [UserResolver],
+    }),
   });
   apolloServer.applyMiddleware({ app });
 
