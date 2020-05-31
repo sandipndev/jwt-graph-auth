@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
   entry: "./src/index.ts",
-  mode: process.env.MODE || "production",
+  mode: process.env.NODE_ENV || "production",
   module: {
     rules: [
       {
