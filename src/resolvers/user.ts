@@ -8,12 +8,11 @@ import {
   ID,
   Ctx,
 } from "type-graphql";
-import { sign } from "jsonwebtoken";
 import { User } from "../models";
-import { SECRET_ACCESSTOKEN, SECRET_REFRESHTOKEN } from "../config";
 
 import { AuthenticationError } from "apollo-server-express";
-import { apolloCtx } from "src/types/apollo.ctx";
+import { apolloCtx } from "../types/apollo.ctx";
+import { createRefreshToken, createAccessToken } from "../auth";
 
 @ObjectType()
 class UserType {
@@ -67,16 +66,10 @@ export class UserResolver {
     if (!valid) throw new AuthenticationError("Bad Password");
 
     // login successful - give tokens
-    res.cookie(
-      "jid",
-      sign({ userId: user.id }, SECRET_REFRESHTOKEN, { expiresIn: "7d" }),
-      { httpOnly: true }
-    );
+    res.cookie("jid", createRefreshToken(user), { httpOnly: true });
 
     return {
-      accessToken: sign({ userId: user.id }, SECRET_ACCESSTOKEN, {
-        expiresIn: "15m",
-      }),
+      accessToken: createAccessToken(user),
     };
   }
 }

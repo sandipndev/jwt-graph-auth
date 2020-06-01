@@ -1,2 +1,2 @@
-import User from "./User";
-export { User };
+import User, { IUser } from "./User";
+export { User, IUser };
