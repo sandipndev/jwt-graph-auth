@@ -13,7 +13,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".mjs", ".ts", ".tsx", ".js"],
   },
   output: {
     filename: "bundle.js",
@@ -22,5 +22,8 @@ module.exports = {
   target: "node",
   stats: {
     warnings: false,
+  },
+  externals: {
+    saslprep: "require('saslprep')",
   },
 };

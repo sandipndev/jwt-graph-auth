@@ -49,6 +49,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.16",
     "reflect-metadata": "^0.1.13",
+    "saslprep": "^1.0.3",
     "type-graphql": "^1.0.0-rc.2"
   }
 }
