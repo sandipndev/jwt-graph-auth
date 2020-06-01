@@ -1,5 +1,5 @@
 import { createAccessToken, createRefreshToken } from "./tokens";
-import { isAuth, handleRefreshToken, addRefreshToken } from "./isAuth";
+import { isAuth, handleRefreshToken, addRefreshToken } from "./auth";
 
 export {
   createAccessToken,
