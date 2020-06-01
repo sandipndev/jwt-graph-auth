@@ -1,2 +1,4 @@
 import { createAccessToken, createRefreshToken } from "./tokens";
-export { createAccessToken, createRefreshToken };
+import { isAuth } from "./isAuth";
+
+export { createAccessToken, createRefreshToken, isAuth };

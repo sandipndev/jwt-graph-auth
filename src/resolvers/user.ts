@@ -7,12 +7,14 @@ import {
   Field,
   ID,
   Ctx,
+  UseMiddleware,
 } from "type-graphql";
 import { User } from "../models";
 
 import { AuthenticationError } from "apollo-server-express";
 import { apolloCtx } from "../types/apollo.ctx";
 import { createRefreshToken, createAccessToken } from "../auth";
+import { isAuth } from "../auth";
 
 @ObjectType()
 class UserType {
@@ -39,6 +41,12 @@ export class UserResolver {
   @Query(() => [UserType])
   async users() {
     return await User.find({});
+  }
+
+  @Query(() => String)
+  @UseMiddleware(isAuth)
+  bye(@Ctx() ctx: apolloCtx) {
+    return "Bye, your id: " + ctx.payload?.userId;
   }
 
   @Mutation(() => UserType)

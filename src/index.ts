@@ -26,6 +26,7 @@ import { apolloCtx } from "./types/apollo.ctx";
       : {
           settings: {
             "request.credentials": "include",
+            "editor.theme": "light",
           },
         },
   });
