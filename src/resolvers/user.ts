@@ -13,7 +13,7 @@ import { User } from "../models";
 
 import { AuthenticationError } from "apollo-server-express";
 import { apolloCtx } from "../types/apollo.ctx";
-import { createRefreshToken, createAccessToken } from "../auth";
+import { createAccessToken, addRefreshToken } from "../auth";
 import { isAuth } from "../auth";
 
 @ObjectType()
@@ -74,7 +74,7 @@ export class UserResolver {
     if (!valid) throw new AuthenticationError("Bad Password");
 
     // login successful - give tokens
-    res.cookie("jid", createRefreshToken(user), { httpOnly: true });
+    addRefreshToken(res, user);
 
     return {
       accessToken: createAccessToken(user),
