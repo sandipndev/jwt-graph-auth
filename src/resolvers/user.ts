@@ -6,12 +6,14 @@ import {
   ObjectType,
   Field,
   ID,
+  Ctx,
 } from "type-graphql";
 import { sign } from "jsonwebtoken";
 import { User } from "../models";
-import { SECRET_ACCESSTOKEN } from "../config";
+import { SECRET_ACCESSTOKEN, SECRET_REFRESHTOKEN } from "../config";
 
 import { AuthenticationError } from "apollo-server-express";
+import { apolloCtx } from "src/types/apollo.ctx";
 
 @ObjectType()
 class UserType {
@@ -55,7 +57,8 @@ export class UserResolver {
   @Mutation(() => LoginResponse)
   async login(
     @Arg("email") email: string,
-    @Arg("password") password: string
+    @Arg("password") password: string,
+    @Ctx() { res }: apolloCtx
   ): Promise<LoginResponse> {
     const user = await User.findOne({ email });
     if (!user) throw new AuthenticationError("Could not find User");
@@ -64,6 +67,12 @@ export class UserResolver {
     if (!valid) throw new AuthenticationError("Bad Password");
 
     // login successful - give tokens
+    res.cookie(
+      "jid",
+      sign({ userId: user.id }, SECRET_REFRESHTOKEN, { expiresIn: "7d" }),
+      { httpOnly: true }
+    );
+
     return {
       accessToken: sign({ userId: user.id }, SECRET_ACCESSTOKEN, {
         expiresIn: "15m",

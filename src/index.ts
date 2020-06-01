@@ -4,8 +4,9 @@ import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import "reflect-metadata";
 
-import { MONGODB_URL, APP_PORT } from "./config";
+import { MONGODB_URL, APP_PORT, IN_PROD } from "./config";
 import { UserResolver } from "./resolvers";
+import { apolloCtx } from "./types/apollo.ctx";
 
 (async () => {
   await mongoose.connect(MONGODB_URL, {
@@ -19,6 +20,14 @@ import { UserResolver } from "./resolvers";
     schema: await buildSchema({
       resolvers: [UserResolver],
     }),
+    context: ({ req, res }: apolloCtx): apolloCtx => ({ req, res }),
+    playground: IN_PROD
+      ? false
+      : {
+          settings: {
+            "request.credentials": "include",
+          },
+        },
   });
   apolloServer.applyMiddleware({ app });
 
