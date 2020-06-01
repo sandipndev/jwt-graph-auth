@@ -1,3 +1,4 @@
+import { AuthenticationError } from "apollo-server-express";
 import {
   Resolver,
   Query,
@@ -9,12 +10,12 @@ import {
   Ctx,
   UseMiddleware,
 } from "type-graphql";
-import { User } from "../models";
 
-import { AuthenticationError } from "apollo-server-express";
-import { apolloCtx } from "../types/apollo.ctx";
+import { User } from "../models";
 import { createAccessToken, addRefreshToken } from "../auth";
 import { isAuth } from "../auth";
+
+import { apolloCtx } from "../types/apollo.ctx";
 
 @ObjectType("UserType")
 class UserType {

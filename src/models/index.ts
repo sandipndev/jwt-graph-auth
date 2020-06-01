@@ -1,2 +1,2 @@
-import User, { IUser } from "./User";
+import User, { IUser } from "./user";
 export { User, IUser };
