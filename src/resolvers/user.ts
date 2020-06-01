@@ -47,7 +47,7 @@ export class UserResolver {
   @Query(() => String)
   @UseMiddleware(isAuth)
   bye(@Ctx() ctx: apolloCtx) {
-    return "Bye, your id: " + ctx.payload?.userId;
+    return "Bye, your id: " + ctx.user?.id;
   }
 
   @Mutation(() => UserType)
@@ -58,6 +58,7 @@ export class UserResolver {
     const user = await User.create({
       email,
       password,
+      whitelistedAccessTokens: [],
     });
     return user;
   }
@@ -78,7 +79,7 @@ export class UserResolver {
     addRefreshToken(res, user);
 
     return {
-      accessToken: createAccessToken(user),
+      accessToken: await createAccessToken(user),
     };
   }
 }

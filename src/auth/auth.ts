@@ -7,16 +7,22 @@ import { User, IUser } from "../models";
 import { SECRET_ACCESSTOKEN, SECRET_REFRESHTOKEN } from "../config";
 import { Request, Response } from "express";
 import { MiddlewareFn } from "type-graphql";
-import { apolloCtx, tokenPayload } from "../types/apollo.ctx";
+import { apolloCtx } from "../types/apollo.ctx";
 
-export const isAuth: MiddlewareFn<apolloCtx> = ({ context }, next) => {
+interface tokenPayload {
+  userId: string;
+}
+
+export const isAuth: MiddlewareFn<apolloCtx> = async ({ context }, next) => {
   const authorization = context.req.headers["authorization"];
   if (!authorization) throw new AuthenticationError("Not authenticated");
 
   try {
     const token = authorization.split(" ")[1];
-    const payload = verify(token, SECRET_ACCESSTOKEN);
-    context.payload = payload as tokenPayload;
+    const payload = verify(token, SECRET_ACCESSTOKEN) as tokenPayload;
+    const user = await User.findById(payload.userId);
+    if (!user) throw new AuthenticationError("Unauthorized user");
+    context.user = user;
   } catch {
     throw new AuthenticationError("Bad token");
   }
@@ -37,7 +43,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
 
     addRefreshToken(res, user);
 
-    res.send({ ok: true, accessToken: createAccessToken(user) });
+    res.send({ ok: true, accessToken: await createAccessToken(user) });
   } catch (err) {
     res.send({ ok: false, accessToken: "" });
   }

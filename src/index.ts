@@ -14,6 +14,7 @@ import { handleRefreshToken } from "./auth";
   await mongoose.connect(MONGODB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: false,
   });
 
   const app = express();

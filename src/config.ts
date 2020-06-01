@@ -14,9 +14,11 @@ export const {
   // BCRYPT SALT WORK - Crypto
   SALT_WORK_FACTOR = 10,
 
-  // JWT Secrets
+  // JWT Secrets and Expirytime
   SECRET_ACCESSTOKEN = "secret-access",
   SECRET_REFRESHTOKEN = "secret-refresh",
+  EXPIRESIN_ACCESSTOKEN = "15m",
+  EXPIRESIN_REFRESHTOKEN = "7d",
 } = process.env;
 
 // Computed

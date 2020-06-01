@@ -1,11 +1,8 @@
 import { Request, Response } from "express";
-
-export interface tokenPayload {
-  userId: string;
-}
+import { IUser } from "../models";
 
 export interface apolloCtx {
   req: Request;
   res: Response;
-  payload?: tokenPayload;
+  user?: IUser;
 }
