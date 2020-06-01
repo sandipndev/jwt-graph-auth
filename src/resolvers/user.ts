@@ -16,7 +16,7 @@ import { apolloCtx } from "../types/apollo.ctx";
 import { createAccessToken, addRefreshToken } from "../auth";
 import { isAuth } from "../auth";
 
-@ObjectType()
+@ObjectType("UserType")
 class UserType {
   @Field(() => ID)
   readonly id: string;
@@ -25,7 +25,7 @@ class UserType {
   email: string;
 }
 
-@ObjectType()
+@ObjectType("LoginResponse")
 class LoginResponse {
   @Field()
   accessToken: string;
@@ -39,7 +39,7 @@ export class UserResolver {
   }
 
   @Query(() => [UserType])
-  async users() {
+  async users(): Promise<Array<UserType>> {
     return await User.find({});
   }
 

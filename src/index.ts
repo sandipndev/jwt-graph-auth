@@ -41,4 +41,4 @@ import { handleRefreshToken } from "./auth";
   apolloServer.applyMiddleware({ app });
 
   app.listen(APP_PORT, () => console.log("🚀 Apollo Server - Port", APP_PORT));
-})();
+})().catch(console.log);
