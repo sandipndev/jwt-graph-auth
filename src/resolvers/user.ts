@@ -7,7 +7,9 @@ import {
   Field,
   ID,
 } from "type-graphql";
+import { sign } from "jsonwebtoken";
 import { User } from "../models";
+import { SECRET_ACCESSTOKEN } from "../config";
 
 import { AuthenticationError } from "apollo-server-express";
 
@@ -18,6 +20,12 @@ class UserType {
 
   @Field()
   email: string;
+}
+
+@ObjectType()
+class LoginResponse {
+  @Field()
+  accessToken: string;
 }
 
 @Resolver()
@@ -36,7 +44,7 @@ export class UserResolver {
   async register(
     @Arg("email") email: string,
     @Arg("password") password: string
-  ) {
+  ): Promise<UserType> {
     const user = await User.create({
       email,
       password,
@@ -44,14 +52,22 @@ export class UserResolver {
     return user;
   }
 
-  @Mutation(() => Boolean)
-  async login(@Arg("email") email: string, @Arg("password") password: string) {
+  @Mutation(() => LoginResponse)
+  async login(
+    @Arg("email") email: string,
+    @Arg("password") password: string
+  ): Promise<LoginResponse> {
     const user = await User.findOne({ email });
     if (!user) throw new AuthenticationError("Could not find User");
 
     const valid = await user.comparePassword(password);
     if (!valid) throw new AuthenticationError("Bad Password");
 
-    return true;
+    // login successful - give tokens
+    return {
+      accessToken: sign({ userId: user.id }, SECRET_ACCESSTOKEN, {
+        expiresIn: "15m",
+      }),
+    };
   }
 }

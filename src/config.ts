@@ -13,6 +13,10 @@ export const {
 
   // BCRYPT SALT WORK - Crypto
   SALT_WORK_FACTOR = 10,
+
+  // JWT Secrets
+  SECRET_ACCESSTOKEN = "secret-access",
+  SECRET_REFRESHTOKEN = "secret-refresh",
 } = process.env;
 
 // Computed

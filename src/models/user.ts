@@ -5,6 +5,7 @@ import { SALT_WORK_FACTOR } from "../config";
 const _SALT_WORK_FACTOR = parseInt(String(SALT_WORK_FACTOR));
 
 export interface IUserDocument extends Document {
+  id: string;
   email: string;
   password: string;
 }
