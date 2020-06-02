@@ -11,21 +11,27 @@ import {
 import { Request, Response } from "express";
 import { tokenPayload } from "../types/token.payload";
 
-const _verifyToken = (token: string): boolean => {
+const _verifyToken = (token: string, secret: string): boolean => {
   try {
-    verify(token, SECRET_ACCESSTOKEN);
+    verify(token, secret);
     return true;
   } catch {
     return false;
   }
 };
 
+const _verifyAccessToken = (token: string) =>
+  _verifyToken(token, SECRET_ACCESSTOKEN);
+
+const _verifyRefreshToken = (token: string) =>
+  _verifyToken(token, SECRET_REFRESHTOKEN);
+
 export const createAccessToken = async (user: IUser): Promise<string> => {
   const accessToken = sign({ userId: user.id }, SECRET_ACCESSTOKEN, {
     expiresIn: EXPIRESIN_ACCESSTOKEN,
   });
 
-  const validTokens = user.whitelistedAccessTokens.filter(_verifyToken);
+  const validTokens = user.whitelistedAccessTokens.filter(_verifyAccessToken);
 
   await User.findByIdAndUpdate(user.id, {
     $set: {
@@ -36,13 +42,24 @@ export const createAccessToken = async (user: IUser): Promise<string> => {
   return accessToken;
 };
 
-export const createRefreshToken = (user: IUser): string =>
-  sign({ userId: user.id }, SECRET_REFRESHTOKEN, {
+export const createRefreshToken = async (user: IUser): Promise<string> => {
+  const refreshToken = sign({ userId: user.id }, SECRET_REFRESHTOKEN, {
     expiresIn: EXPIRESIN_REFRESHTOKEN,
   });
 
-export const addRefreshToken = (res: Response, user: IUser) => {
-  res.cookie("jid", createRefreshToken(user), {
+  const validTokens = user.whitelistedRefreshTokens.filter(_verifyRefreshToken);
+
+  await User.findByIdAndUpdate(user.id, {
+    $set: {
+      whitelistedRefreshTokens: [...validTokens, refreshToken],
+    },
+  });
+
+  return refreshToken;
+};
+
+export const addRefreshToken = async (res: Response, user: IUser) => {
+  res.cookie("jid", await createRefreshToken(user), {
     httpOnly: true,
     sameSite: "strict",
     path: "/refresh_token",
@@ -52,15 +69,21 @@ export const addRefreshToken = (res: Response, user: IUser) => {
 // POST endpoint /refresh_token
 export const handleRefreshToken = async (req: Request, res: Response) => {
   const token: string = req.cookies.jid;
-  if (!token) res.send({ ok: false, accessToken: "" });
 
   try {
+    if (!token) throw Error;
+
     const payload = verify(token, SECRET_REFRESHTOKEN);
 
     const user = await User.findOne({ _id: (payload as tokenPayload).userId });
     if (!user) throw Error;
 
-    addRefreshToken(res, user);
+    const userWhitelist = user.whitelistedRefreshTokens;
+    if (!userWhitelist.includes(token)) throw Error;
+
+    // sets to db in addRefreshToken
+    user.whitelistedRefreshTokens = userWhitelist.filter((x) => x !== token);
+    await addRefreshToken(res, user);
 
     res.send({ ok: true, accessToken: await createAccessToken(user) });
   } catch (err) {

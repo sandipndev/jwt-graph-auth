@@ -9,6 +9,7 @@ export interface IUserDocument extends Document {
   email: string;
   password: string;
   whitelistedAccessTokens: Array<string>;
+  whitelistedRefreshTokens: Array<string>;
 }
 
 // methods
@@ -32,6 +33,7 @@ const userSchema = new Schema({
   },
   password: String,
   whitelistedAccessTokens: [String],
+  whitelistedRefreshTokens: [String],
 });
 
 userSchema.pre<IUser>("save", async function (next) {

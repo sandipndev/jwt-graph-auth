@@ -59,6 +59,7 @@ export class UserResolver {
       email,
       password,
       whitelistedAccessTokens: [],
+      whitelistedRefreshTokens: [],
     });
     return user;
   }
@@ -76,7 +77,7 @@ export class UserResolver {
     if (!valid) throw new AuthenticationError("Bad Password");
 
     // login successful - give tokens
-    addRefreshToken(res, user);
+    await addRefreshToken(res, user);
 
     return {
       accessToken: await createAccessToken(user),
