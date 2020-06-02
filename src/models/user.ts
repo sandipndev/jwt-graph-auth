@@ -25,7 +25,7 @@ const userSchema = new Schema({
   email: {
     type: String,
     validate: {
-      validator: (email: String): Promise<boolean> =>
+      validator: (email: string): Promise<boolean> =>
         User.checkUnique("email", email),
       message: ({ value }) => `Account with email ${value} already exists`,
     },
