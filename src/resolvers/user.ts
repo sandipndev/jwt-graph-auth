@@ -1,4 +1,3 @@
-import { randomBytes } from "crypto";
 import { AuthenticationError } from "apollo-server-express";
 import {
   Resolver,
@@ -12,7 +11,11 @@ import {
 import { UserType, LoginResponse } from "../types/user-resolver.types";
 
 import { User } from "../models";
-import { createAccessToken, addRefreshToken } from "../tokens";
+import {
+  createAccessToken,
+  addRefreshToken,
+  generateVerificationToken,
+} from "../tokens";
 import { isAuth } from "../auth";
 
 import { sendEmail } from "../utils/mailer";
@@ -38,7 +41,7 @@ export class UserResolver {
     @Arg("email") email: string,
     @Arg("password") password: string
   ): Promise<UserType> {
-    const verifyToken = randomBytes(120).toString("base64");
+    const verificationToken = generateVerificationToken();
 
     const user = await User.create({
       email,
@@ -46,14 +49,16 @@ export class UserResolver {
       whitelistedAccessTokens: [],
       whitelistedRefreshTokens: [],
       verified: false,
-      verifyToken,
+      verificationToken,
     });
 
     sendEmail({
       to: email,
       subject: "Please Verify your Email-Address!",
-      templateFile: "emails/verify-email.ejs",
-      completeVerificationLink: `${FULL_APP_LINK}/verify/?id=${user.id}&&token=${verifyToken}`,
+      templateFile: "pages/verify-email.ejs",
+      templateData: {
+        completeVerificationLink: `${FULL_APP_LINK}/verify/${user.id}/${verificationToken}`,
+      },
     }).then(() => {});
 
     return user;

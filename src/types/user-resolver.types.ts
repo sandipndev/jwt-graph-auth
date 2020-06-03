@@ -1,4 +1,5 @@
 import { ObjectType, Field, ID } from "type-graphql";
+import "reflect-metadata";
 
 @ObjectType("UserType")
 export class UserType {

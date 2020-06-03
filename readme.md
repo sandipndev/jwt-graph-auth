@@ -6,7 +6,7 @@ Features:
 
 - [x] Signup using email and password
 - [x] On signup, send customized email for email confirmation
-- [ ] On email confirmation, send customized email of email verified notification
+- [x] On email confirmation, send customized email of email verified notification
 - [x] Signin to get accesstoken and refreshtoken
 - [ ] Update/Change password
 - [ ] Forgot password (send email to registered email)
@@ -17,3 +17,4 @@ Bucket List:
 
 - [ ] Proper docs for usability
 - [ ] Phone number and 2FA
+- [ ] Nice UI of pages

@@ -3,12 +3,13 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import cookieParser from "cookie-parser";
-import "reflect-metadata";
 
 import { MONGODB_URL, APP_PORT, IN_PROD } from "./config";
 import { UserResolver } from "./resolvers";
+import { handleRefreshToken, handleVerificationToken } from "./api";
+
 import { apolloCtx } from "./types/apollo.ctx";
-import { handleRefreshToken } from "./api";
+import "reflect-metadata";
 
 (async () => {
   await mongoose.connect(MONGODB_URL, {
@@ -24,6 +25,7 @@ import { handleRefreshToken } from "./api";
   app.disable("etag");
 
   app.post("/refresh_token", handleRefreshToken);
+  app.get("/verify/:id/:token", handleVerificationToken);
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({

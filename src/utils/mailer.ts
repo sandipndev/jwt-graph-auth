@@ -11,22 +11,20 @@ interface sendEmailOptions {
   to: string;
   subject: string;
   templateFile: string;
-  completeVerificationLink: string;
+  templateData: object;
 }
 
 export const sendEmail = async ({
   to,
   subject,
   templateFile,
-  completeVerificationLink,
+  templateData,
 }: sendEmailOptions): Promise<string> => {
   const templateFilePath = path.resolve(
     path.join(__dirname, "..", templateFile)
   );
 
-  const html = await renderFile(templateFilePath, {
-    completeVerificationLink,
-  });
+  const html = await renderFile(templateFilePath, templateData);
 
   const info = await transporter.sendMail({
     from,

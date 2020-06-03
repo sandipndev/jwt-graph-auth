@@ -9,7 +9,7 @@ import { addRefreshToken } from "../tokens";
 import { SECRET_REFRESHTOKEN } from "../config";
 
 // POST endpoint /refresh_token
-export const handleRefreshToken = async (req: Request, res: Response) => {
+const handleRefreshToken = async (req: Request, res: Response) => {
   const token: string = req.cookies.jid;
 
   try {
@@ -17,7 +17,7 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
 
     const payload = verify(token, SECRET_REFRESHTOKEN);
 
-    const user = await User.findOne({ _id: (payload as tokenPayload).userId });
+    const user = await User.findById((payload as tokenPayload).userId);
     if (!user) throw Error;
 
     const userWhitelist = user.whitelistedRefreshTokens;
@@ -32,3 +32,5 @@ export const handleRefreshToken = async (req: Request, res: Response) => {
     res.send({ ok: false, accessToken: "" });
   }
 };
+
+export default handleRefreshToken;
