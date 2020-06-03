@@ -106,7 +106,7 @@ export class UserResolver {
   @UseMiddleware(isAuth)
   async logout(@Ctx() { res }: apolloCtx) {
     res.clearCookie("jid");
-    return false;
+    return true;
   }
 
   async updatePassword() {}
