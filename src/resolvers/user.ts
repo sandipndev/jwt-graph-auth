@@ -83,4 +83,7 @@ export class UserResolver {
       accessToken: await createAccessToken(user),
     };
   }
+
+  async logout() {}
+  async updatePassword() {}
 }
