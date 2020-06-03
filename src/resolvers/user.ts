@@ -16,7 +16,7 @@ import {
   addRefreshToken,
   generateVerificationToken,
 } from "../tokens";
-import { isAuth } from "../auth";
+import { isAuth, isVerified } from "../auth";
 
 import { sendEmail } from "../utils/mailer";
 import { FULL_APP_LINK } from "../config";
@@ -34,6 +34,13 @@ export class UserResolver {
   @UseMiddleware(isAuth)
   hey(@Ctx() { user }: apolloCtx) {
     return "Hey, your id: " + user?.id;
+  }
+
+  @Query(() => String)
+  @UseMiddleware(isAuth)
+  @UseMiddleware(isVerified)
+  hola(@Ctx() { user }: apolloCtx) {
+    return "Only when verified. Hola, your id: " + user?.id;
   }
 
   @Mutation(() => UserType)

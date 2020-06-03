@@ -37,8 +37,6 @@ const verifyToken = async (req: Request, res: Response) => {
   );
   const html = await renderFile(htmlPath, { email });
 
-  console.log(html);
-
   return res.status(200).send(html);
 };
 

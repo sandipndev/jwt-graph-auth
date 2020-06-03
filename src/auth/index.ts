@@ -1,3 +1,4 @@
-import { isAuth } from "./auth";
+import isAuth from "./isAuth";
+import isVerified from "./isVerified";
 
-export { isAuth };
+export { isAuth, isVerified };

@@ -9,7 +9,7 @@ import { apolloCtx } from "../types/apollo.ctx";
 
 import { tokenPayload } from "../types/token.payload";
 
-export const isAuth: MiddlewareFn<apolloCtx> = async ({ context }, next) => {
+const isAuth: MiddlewareFn<apolloCtx> = async ({ context }, next) => {
   const authorization = context.req.headers["authorization"];
   if (!authorization) throw new AuthenticationError("Not authenticated");
 
@@ -31,3 +31,5 @@ export const isAuth: MiddlewareFn<apolloCtx> = async ({ context }, next) => {
 
   return next();
 };
+
+export default isAuth;
