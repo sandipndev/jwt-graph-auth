@@ -10,6 +10,8 @@ export interface IUserDocument extends Document {
   password: string;
   whitelistedAccessTokens: Array<string>;
   whitelistedRefreshTokens: Array<string>;
+  verified: boolean;
+  verificationToken: string;
 }
 
 // methods
@@ -34,6 +36,8 @@ const userSchema = new Schema({
   password: String,
   whitelistedAccessTokens: [String],
   whitelistedRefreshTokens: [String],
+  verified: Boolean,
+  verificationToken: String,
 });
 
 userSchema.pre<IUser>("save", async function (next) {
