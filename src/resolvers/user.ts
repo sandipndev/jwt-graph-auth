@@ -28,21 +28,19 @@ class UserType {
 
   @Field()
   email: string;
+
+  @Field()
+  verified: boolean;
 }
 
 @ObjectType("LoginResponse")
-class LoginResponse {
+class LoginResponse extends UserType {
   @Field()
   accessToken: string;
 }
 
 @Resolver()
 export class UserResolver {
-  @Query(() => String)
-  hello() {
-    return "hi!";
-  }
-
   @Query(() => [UserType])
   async users(): Promise<Array<UserType>> {
     return await User.find({});
@@ -50,8 +48,8 @@ export class UserResolver {
 
   @Query(() => String)
   @UseMiddleware(isAuth)
-  hey(@Ctx() ctx: apolloCtx) {
-    return "Hey, your id: " + ctx.user?.id;
+  hey(@Ctx() { user }: apolloCtx) {
+    return "Hey, your id: " + user?.id;
   }
 
   @Mutation(() => UserType)
@@ -94,12 +92,22 @@ export class UserResolver {
 
     // login successful - give tokens
     await addRefreshToken(res, user);
+    const { id, verified } = user;
 
     return {
+      id,
+      email,
+      verified,
       accessToken: await createAccessToken(user),
     };
   }
 
-  async logout() {}
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async logout(@Ctx() { res }: apolloCtx) {
+    res.clearCookie("jid");
+    return false;
+  }
+
   async updatePassword() {}
 }
