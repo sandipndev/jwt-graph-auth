@@ -5,39 +5,20 @@ import {
   Query,
   Mutation,
   Arg,
-  ObjectType,
-  Field,
-  ID,
   Ctx,
   UseMiddleware,
 } from "type-graphql";
 
+import { UserType, LoginResponse } from "../types/user-resolver.types";
+
 import { User } from "../models";
-import { createAccessToken, addRefreshToken } from "../auth";
+import { createAccessToken, addRefreshToken } from "../tokens";
 import { isAuth } from "../auth";
 
 import { sendEmail } from "../utils/mailer";
 import { FULL_APP_LINK } from "../config";
 
 import { apolloCtx } from "../types/apollo.ctx";
-
-@ObjectType("UserType")
-class UserType {
-  @Field(() => ID)
-  readonly id: string;
-
-  @Field()
-  email: string;
-
-  @Field()
-  verified: boolean;
-}
-
-@ObjectType("LoginResponse")
-class LoginResponse extends UserType {
-  @Field()
-  accessToken: string;
-}
 
 @Resolver()
 export class UserResolver {

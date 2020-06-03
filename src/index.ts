@@ -8,7 +8,7 @@ import "reflect-metadata";
 import { MONGODB_URL, APP_PORT, IN_PROD } from "./config";
 import { UserResolver } from "./resolvers";
 import { apolloCtx } from "./types/apollo.ctx";
-import { handleRefreshToken } from "./auth";
+import { handleRefreshToken } from "./api";
 
 (async () => {
   await mongoose.connect(MONGODB_URL, {
