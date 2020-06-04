@@ -17,7 +17,6 @@ Work In Progress.
 
 - [ ] Proper docs for usability
 - [ ] Phone number and 2FA
-- [ ] Nice UI of pages
 
 ### Take Care, Router
 
