@@ -1,7 +1,7 @@
 import { ObjectType, Field, ID } from "type-graphql";
 import "reflect-metadata";
 
-@ObjectType("UserType")
+@ObjectType("User")
 export class UserType {
   @Field(() => ID)
   readonly id: string;
@@ -13,7 +13,7 @@ export class UserType {
   verified: boolean;
 }
 
-@ObjectType("LoginResponse")
+@ObjectType("Access")
 export class LoginResponse extends UserType {
   @Field()
   accessToken: string;
