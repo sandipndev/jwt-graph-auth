@@ -47,6 +47,33 @@ class UpdatePasswords {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  @UseMiddleware(isVerified)
+  async changePasswordWithoutOldPassword(
+    @Arg("newPassword") newPassword: string,
+    @Ctx() { user, tokenPayload }: apolloCtx
+  ): Promise<boolean> {
+    if (!user) return false;
+
+    if (!tokenPayload?.allowChangePasswordWithoutOld) return false;
+
+    user.password = newPassword;
+    await user.save({ validateBeforeSave: false });
+
+    const { email } = user;
+    sendEmail({
+      to: email,
+      subject: "Password Changed Successfully!",
+      templateFile: "emails/password-changed.ejs",
+      templateData: {
+        email,
+      },
+    }).then(() => {});
+
+    return true;
+  }
+
+  @Mutation(() => Boolean)
   async forgotPassword(@Arg("email") email: string): Promise<boolean> {
     const user = await User.findOne({ email });
     if (!user) throw new AuthenticationError("Could not find user");
@@ -69,7 +96,7 @@ class UpdatePasswords {
     @Arg("forgotPasswordToken") forgotPasswordToken: string
   ): Promise<LoginResponse> {
     const user = await verifyForgotPasswordToken(forgotPasswordToken);
-    const accessToken = await createAccessToken(user);
+    const accessToken = await createAccessToken(user, true);
 
     const { id, email, verified } = user;
     return {

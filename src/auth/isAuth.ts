@@ -25,6 +25,7 @@ const isAuth: MiddlewareFn<apolloCtx> = async ({ context }, next) => {
       throw new AuthenticationError("Bad token");
 
     context.user = user;
+    context.tokenPayload = payload;
   } catch {
     throw new AuthenticationError("Bad token");
   }

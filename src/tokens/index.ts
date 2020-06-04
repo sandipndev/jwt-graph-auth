@@ -4,7 +4,10 @@ import {
   createForgotPasswordToken,
   verifyForgotPasswordToken,
 } from "./forgot-password.token";
-import generateRandomToken from "./random.token";
+import {
+  createEmailVerificationToken,
+  verifyEmailVerificationToken,
+} from "./email-verification.token";
 
 export {
   createRefreshToken,
@@ -12,5 +15,6 @@ export {
   addRefreshToken,
   createForgotPasswordToken,
   verifyForgotPasswordToken,
-  generateRandomToken,
+  createEmailVerificationToken,
+  verifyEmailVerificationToken,
 };

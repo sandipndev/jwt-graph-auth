@@ -9,7 +9,7 @@ Work In Progress.
 - [x] On email confirmation, send customized email of email verified notification
 - [x] Signin to get accesstoken and refreshtoken
 - [x] Update/Change password
-- [ ] Forgot password (send email to registered email)
+- [x] Forgot password (send email to registered email)
 - [x] Support for multiple sessions and single-session
 - [ ] Revoke accesstoken and refreshtoken (Log me out from all devices)
 

@@ -11,7 +11,7 @@ export interface IUserDocument extends Document {
   whitelistedAccessTokens: Array<string>;
   whitelistedRefreshTokens: Array<string>;
   verified: boolean;
-  verificationToken: string;
+  emailVerificationToken: string;
   forgotPasswordTokens: Array<string>;
 }
 
@@ -38,7 +38,7 @@ const userSchema = new Schema({
   whitelistedAccessTokens: [String],
   whitelistedRefreshTokens: [String],
   verified: Boolean,
-  verificationToken: String,
+  emailVerificationToken: String,
   forgotPasswordTokens: [String],
 });
 

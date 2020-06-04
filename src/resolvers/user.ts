@@ -14,7 +14,8 @@ import { User } from "../models";
 import {
   createAccessToken,
   addRefreshToken,
-  generateRandomToken,
+  createEmailVerificationToken,
+  verifyEmailVerificationToken,
 } from "../tokens";
 import { isAuth } from "../auth";
 
@@ -31,24 +32,24 @@ class UserResolver {
     @Arg("email") email: string,
     @Arg("password") password: string
   ): Promise<UserType> {
-    const verificationToken = generateRandomToken();
-
     const user = await User.create({
       email,
       password,
       whitelistedAccessTokens: [],
       whitelistedRefreshTokens: [],
       verified: false,
-      verificationToken,
+      emailVerificationToken: "",
       forgotPasswordTokens: [],
     });
+
+    const emailVerifiationToken = await createEmailVerificationToken(user);
 
     sendEmail({
       to: email,
       subject: "Please Verify your Email-Address!",
       templateFile: "emails/verify.ejs",
       templateData: {
-        completeVerificationLink: `${FULL_APP_LINK}/verify/${user.id}/${verificationToken}`,
+        completeVerificationLink: `${FULL_APP_LINK}/verify/${emailVerifiationToken}`,
       },
     }).then(() => {});
 
@@ -90,6 +91,25 @@ class UserResolver {
   @UseMiddleware(isAuth)
   async logout(@Ctx() { res }: apolloCtx): Promise<boolean> {
     res.clearCookie("jid");
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async verifyEmail(@Arg("token") token: string): Promise<boolean> {
+    const user = await verifyEmailVerificationToken(token);
+
+    if (!user) throw new Error("User not found");
+    const { email } = user;
+
+    if (!user.verified) {
+      sendEmail({
+        to: email,
+        templateFile: "emails/verified.ejs",
+        subject: "Congratulations, your email has been verified!",
+        templateData: { email },
+      }).then(() => {});
+    }
+
     return true;
   }
 }

@@ -3,18 +3,15 @@ import { sign, verify } from "jsonwebtoken";
 
 import verifyToken from "../utils/verify-token";
 import { User, IUser } from "./../models";
-import {
-  EXPIRESIN_FORGOTPASSWORDTOKEN,
-  SECRET_FORGOTPASSWORDTOKEN,
-} from "../config";
+import { EXPIRESIN_FORGOTPASSWORDTOKEN, SECRET_OTHERTOKENS } from "../config";
 
 const _verifyForgotPasswordToken = (token: string) =>
-  verifyToken(token, SECRET_FORGOTPASSWORDTOKEN);
+  verifyToken(token, SECRET_OTHERTOKENS);
 
 const createForgotPasswordToken = async (user: IUser): Promise<string> => {
   const forgotPasswordToken = sign(
     { userId: user.id, isForgotPasswordToken: true },
-    SECRET_FORGOTPASSWORDTOKEN,
+    SECRET_OTHERTOKENS,
     {
       expiresIn: EXPIRESIN_FORGOTPASSWORDTOKEN,
     }
@@ -34,7 +31,7 @@ const createForgotPasswordToken = async (user: IUser): Promise<string> => {
 };
 
 const verifyForgotPasswordToken = async (token: string): Promise<IUser> => {
-  const payload = verify(token, SECRET_FORGOTPASSWORDTOKEN);
+  const payload = verify(token, SECRET_OTHERTOKENS);
   if ((payload as tokenPayload).isForgotPasswordToken !== true)
     throw new Error("Token incorrect");
 

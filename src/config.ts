@@ -19,10 +19,11 @@ export const {
   // JWT Secrets and Expirytime
   SECRET_ACCESSTOKEN = "secret-access",
   SECRET_REFRESHTOKEN = "secret-refresh",
-  SECRET_FORGOTPASSWORDTOKEN = "secret-forgotpassword",
+  SECRET_OTHERTOKENS = "secret-othertokens",
   EXPIRESIN_ACCESSTOKEN = "15m",
   EXPIRESIN_REFRESHTOKEN = "7d",
   EXPIRESIN_FORGOTPASSWORDTOKEN = "1d",
+  EXPIRESIN_EMAILVERIFICATIONTOKEN = "1d",
 
   // SMTP Account - for emails
   SMTP_HOST = "",
