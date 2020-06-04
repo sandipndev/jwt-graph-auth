@@ -11,7 +11,7 @@ Work In Progress.
 - [x] Update/Change password
 - [x] Forgot password (send email to registered email)
 - [x] Support for multiple sessions and single-session
-- [ ] Revoke accesstoken and refreshtoken (Log me out from all devices)
+- [x] Revoke accesstoken and refreshtoken (Log me out from all devices)
 
 ### Bucket List:
 
@@ -21,5 +21,5 @@ Work In Progress.
 
 ### Take Care, Router
 
-1. `/verify/:id/:token` - For email verification
+1. `/verify/:token` - For email verification
 2. `/forgot-password/:token` - For forgot password

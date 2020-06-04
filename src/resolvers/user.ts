@@ -17,7 +17,7 @@ import {
   createEmailVerificationToken,
   verifyEmailVerificationToken,
 } from "../tokens";
-import { isAuth } from "../auth";
+import { isAuth, isVerified } from "../auth";
 
 import { sendEmail } from "../utils/mailer";
 import { FULL_APP_LINK } from "../config";
@@ -109,6 +109,22 @@ class UserResolver {
         templateData: { email },
       }).then(() => {});
     }
+
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  @UseMiddleware(isVerified)
+  async logMeOutOfAllDevices(@Ctx() { user }: apolloCtx): Promise<boolean> {
+    if (!user) throw Error;
+
+    await User.findByIdAndUpdate(user.id, {
+      $set: {
+        whitelistedRefreshTokens: [],
+        whitelistedAccessTokens: [],
+      },
+    });
 
     return true;
   }

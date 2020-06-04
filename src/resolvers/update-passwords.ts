@@ -54,8 +54,8 @@ class UpdatePasswords {
     @Ctx() { user, tokenPayload }: apolloCtx
   ): Promise<boolean> {
     if (!user) return false;
-
-    if (!tokenPayload?.allowChangePasswordWithoutOld) return false;
+    if (!tokenPayload?.allowChangePasswordWithoutOld)
+      throw new Error("Bad token");
 
     user.password = newPassword;
     await user.save({ validateBeforeSave: false });
