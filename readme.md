@@ -2,7 +2,7 @@
 
 Work In Progress.
 
-Features:
+### Features:
 
 - [x] Signup using email and password
 - [x] On signup, send customized email for email confirmation
@@ -13,8 +13,13 @@ Features:
 - [x] Support for multiple sessions and single-session
 - [ ] Revoke accesstoken and refreshtoken (Log me out from all devices)
 
-Bucket List:
+### Bucket List:
 
 - [ ] Proper docs for usability
 - [ ] Phone number and 2FA
 - [ ] Nice UI of pages
+
+### Take Care, Router
+
+1. `/verify/:id/:token` - For email verification
+2. `/forgot-password/:token` - For forgot password
