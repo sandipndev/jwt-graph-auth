@@ -14,7 +14,7 @@ import { User } from "../models";
 import {
   createAccessToken,
   addRefreshToken,
-  generateVerificationToken,
+  generateRandomToken,
 } from "../tokens";
 import { isAuth, isVerified } from "../auth";
 
@@ -25,6 +25,7 @@ import { apolloCtx } from "../types/apollo.ctx";
 
 @Resolver()
 export class UserResolver {
+  /* === APIS FOR TESTING === */
   @Query(() => [UserType])
   async users(): Promise<Array<UserType>> {
     return await User.find({});
@@ -43,12 +44,14 @@ export class UserResolver {
     return "Only when verified. Hola, your id: " + user?.id;
   }
 
+  /* === APIS FOR PRODUCTION === */
   @Mutation(() => UserType)
   async register(
     @Arg("email") email: string,
     @Arg("password") password: string
   ): Promise<UserType> {
-    const verificationToken = generateVerificationToken();
+    const verificationToken = generateRandomToken();
+    const forgotPasswordToken = generateRandomToken();
 
     const user = await User.create({
       email,
@@ -57,6 +60,7 @@ export class UserResolver {
       whitelistedRefreshTokens: [],
       verified: false,
       verificationToken,
+      forgotPasswordToken,
     });
 
     sendEmail({
@@ -130,6 +134,21 @@ export class UserResolver {
         email,
       },
     }).then(() => {});
+
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  async forgotPassword(@Arg("email") email: string): Promise<boolean> {
+    const user = await User.findOne({ email });
+    if (!user) throw new AuthenticationError("Could not find user");
+
+    const forgotPasswordToken = generateRandomToken();
+    await User.findByIdAndUpdate(user.id, {
+      $set: {
+        forgotPasswordToken,
+      },
+    });
 
     return true;
   }

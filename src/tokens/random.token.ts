@@ -1,6 +1,6 @@
 import { randomBytes } from "crypto";
 
-const generateVerificationToken = () =>
+const generateRandomToken = () =>
   randomBytes(120).toString("base64").replace(/\//gi, "");
 
-export default generateVerificationToken;
+export default generateRandomToken;
