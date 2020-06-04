@@ -1,10 +1,16 @@
+import { FULL_APP_LINK } from "./../config";
 import { Resolver, Mutation, Arg, UseMiddleware, Ctx } from "type-graphql";
 import { AuthenticationError } from "apollo-server-express";
 import { User } from "../models";
-import { generateRandomToken } from "../tokens";
+import {
+  createForgotPasswordToken,
+  verifyForgotPasswordToken,
+  createAccessToken,
+} from "../tokens";
 import { isAuth, isVerified } from "../auth";
 import { apolloCtx } from "../types/apollo.ctx";
 import { sendEmail } from "../utils/mailer";
+import { LoginResponse } from "../types/user-resolver.types";
 
 @Resolver()
 class UpdatePasswords {
@@ -31,7 +37,7 @@ class UpdatePasswords {
     sendEmail({
       to: email,
       subject: "Password Changed Successfully!",
-      templateFile: "pages/passwordchanged-email.ejs",
+      templateFile: "emails/password-changed.ejs",
       templateData: {
         email,
       },
@@ -45,14 +51,33 @@ class UpdatePasswords {
     const user = await User.findOne({ email });
     if (!user) throw new AuthenticationError("Could not find user");
 
-    const forgotPasswordToken = generateRandomToken();
-    await User.findByIdAndUpdate(user.id, {
-      $set: {
-        forgotPasswordToken,
+    const forgotPasswordToken = await createForgotPasswordToken(user);
+    sendEmail({
+      to: user.email,
+      subject: "Forgot Password? No Worries",
+      templateFile: "emails/forgot-password.ejs",
+      templateData: {
+        completeForgotPasswordTokenLink: `${FULL_APP_LINK}/forgot-password/${forgotPasswordToken}`,
       },
-    });
+    }).then(() => {});
 
     return true;
+  }
+
+  @Mutation(() => LoginResponse)
+  async forgotPasswordVerify(
+    @Arg("forgotPasswordToken") forgotPasswordToken: string
+  ): Promise<LoginResponse> {
+    const user = await verifyForgotPasswordToken(forgotPasswordToken);
+    const accessToken = await createAccessToken(user);
+
+    const { id, email, verified } = user;
+    return {
+      id,
+      email,
+      verified,
+      accessToken,
+    };
   }
 }
 

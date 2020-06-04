@@ -32,7 +32,6 @@ class UserResolver {
     @Arg("password") password: string
   ): Promise<UserType> {
     const verificationToken = generateRandomToken();
-    const forgotPasswordToken = generateRandomToken();
 
     const user = await User.create({
       email,
@@ -41,13 +40,13 @@ class UserResolver {
       whitelistedRefreshTokens: [],
       verified: false,
       verificationToken,
-      forgotPasswordToken,
+      forgotPasswordTokens: [],
     });
 
     sendEmail({
       to: email,
       subject: "Please Verify your Email-Address!",
-      templateFile: "pages/verify-email.ejs",
+      templateFile: "emails/verify.ejs",
       templateData: {
         completeVerificationLink: `${FULL_APP_LINK}/verify/${user.id}/${verificationToken}`,
       },
@@ -70,8 +69,8 @@ class UserResolver {
 
     // login successful - give tokens
     await addRefreshToken(res, user);
-    const { id, verified } = user;
 
+    const { id, verified } = user;
     return {
       id,
       email,
