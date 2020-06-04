@@ -5,7 +5,7 @@ import { buildSchema } from "type-graphql";
 import cookieParser from "cookie-parser";
 
 import { MONGODB_URL, APP_PORT, IN_PROD } from "./config";
-import { UserResolver } from "./resolvers";
+import { UserResolver, UpdatePasswords } from "./resolvers";
 import { handleRefreshToken, handleVerificationToken } from "./api";
 
 import { apolloCtx } from "./types/apollo.ctx";
@@ -29,7 +29,7 @@ import "reflect-metadata";
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, UpdatePasswords],
     }),
     context: ({ req, res }: apolloCtx): apolloCtx => ({ req, res }),
     playground: IN_PROD
