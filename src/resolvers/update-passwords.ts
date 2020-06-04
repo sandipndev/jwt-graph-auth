@@ -22,7 +22,7 @@ class UpdatePasswords {
     @Arg("newPassword") newPassword: string,
     @Ctx() { user }: apolloCtx
   ): Promise<boolean> {
-    if (!user) return false;
+    if (!user) throw Error;
 
     if (!(await user.comparePassword(oldPassword)))
       throw new AuthenticationError("Old Password Incorrect");
@@ -53,7 +53,7 @@ class UpdatePasswords {
     @Arg("newPassword") newPassword: string,
     @Ctx() { user, tokenPayload }: apolloCtx
   ): Promise<boolean> {
-    if (!user) return false;
+    if (!user) throw Error;
     if (!tokenPayload?.allowChangePasswordWithoutOld)
       throw new Error("Bad token");
 
