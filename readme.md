@@ -1,7 +1,5 @@
 # Complete Authentication System Curated for Node.js
 
-Work In Progress.
-
 ### Features:
 
 - [x] Signup using email and password
