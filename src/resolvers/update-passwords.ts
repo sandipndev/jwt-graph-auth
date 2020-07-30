@@ -17,7 +17,6 @@ class UpdatePasswords {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   @UseMiddleware(isVerified)
-  @UseMiddleware(hasOAuthScope("admin"))
   async changePassword(
     @Arg("oldPassword") oldPassword: string,
     @Arg("newPassword") newPassword: string,
@@ -50,7 +49,6 @@ class UpdatePasswords {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   @UseMiddleware(isVerified)
-  @UseMiddleware(hasOAuthScope("admin"))
   async changePasswordWithoutOldPassword(
     @Arg("newPassword") newPassword: string,
     @Ctx() { user, tokenPayload }: apolloCtx
