@@ -7,7 +7,7 @@ import {
   verifyForgotPasswordToken,
   createAccessToken,
 } from "../tokens";
-import { isAuth, isVerified } from "../auth";
+import { isAuth, isVerified, hasOAuthScope } from "../auth";
 import { apolloCtx } from "../types/apollo.ctx";
 import { sendEmail } from "../utils/mailer";
 import { LoginResponse } from "../types/user-resolver.types";
@@ -17,6 +17,7 @@ class UpdatePasswords {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   @UseMiddleware(isVerified)
+  @UseMiddleware(hasOAuthScope("admin"))
   async changePassword(
     @Arg("oldPassword") oldPassword: string,
     @Arg("newPassword") newPassword: string,
@@ -49,6 +50,7 @@ class UpdatePasswords {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   @UseMiddleware(isVerified)
+  @UseMiddleware(hasOAuthScope("admin"))
   async changePasswordWithoutOldPassword(
     @Arg("newPassword") newPassword: string,
     @Ctx() { user, tokenPayload }: apolloCtx

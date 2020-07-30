@@ -13,6 +13,7 @@ export interface IUserDocument extends Document {
   verified: boolean;
   emailVerificationToken: string;
   forgotPasswordTokens: Array<string>;
+  oAuthScope: Array<string>;
 }
 
 // methods
@@ -40,6 +41,7 @@ const userSchema = new Schema({
   verified: Boolean,
   emailVerificationToken: String,
   forgotPasswordTokens: [String],
+  oAuthScope: [String],
 });
 
 userSchema.pre<IUser>("save", async function (next) {
