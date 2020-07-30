@@ -40,6 +40,7 @@ class UserResolver {
       verified: false,
       emailVerificationToken: "",
       forgotPasswordTokens: [],
+      oAuthScope: [],
     });
 
     const emailVerifiationToken = await createEmailVerificationToken(user);
