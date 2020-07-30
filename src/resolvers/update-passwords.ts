@@ -7,7 +7,7 @@ import {
   verifyForgotPasswordToken,
   createAccessToken,
 } from "../tokens";
-import { isAuth, isVerified, hasOAuthScope } from "../auth";
+import { isAuth, isVerified } from "../auth";
 import { apolloCtx } from "../types/apollo.ctx";
 import { sendEmail } from "../utils/mailer";
 import { LoginResponse } from "../types/user-resolver.types";
