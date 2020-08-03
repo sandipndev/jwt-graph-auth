@@ -10,12 +10,12 @@ export const {
   NODE_ENV = "development",
 
   // MongoDB
-  DB_USER = "jwt-test",
-  DB_PASS = "jwt-test",
+  DB_USER = "",
+  DB_PASS = "",
   DB_HOST = "localhost",
   DB_PORT = 27017,
-  DB_NAME = "jwt-test",
-  DB_AUTHSOURCE = "jwt-test", // Authentication Database
+  DB_NAME = "",
+  DB_AUTHSOURCE = "", // Authentication Database
 
   // BCRYPT SALT WORK - Crypto
   SALT_WORK_FACTOR = 10,
@@ -40,7 +40,12 @@ export const {
 
 // Computed
 export const IN_PROD = NODE_ENV === "production";
-export const MONGODB_URL = `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT}/${DB_NAME}?authSource=${DB_AUTHSOURCE}`;
+
+export const MONGODB_URL = `mongodb://${
+  DB_USER && `${DB_USER}:${DB_PASS}@`
+}${DB_HOST}:${DB_PORT}/${DB_NAME}${
+  DB_AUTHSOURCE && `?authSource=${DB_AUTHSOURCE}`
+}`;
 
 export const FULL_APP_LINK = `${
   HTTPS === "true" ? "https" : "http"
