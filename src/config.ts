@@ -3,10 +3,13 @@ dotenv.config();
 
 export const {
   // App
-  HTTPS = "false",
-  APP_LINK = "localhost",
   APP_PORT = 4000,
   NODE_ENV = "development",
+
+  // UI
+  HTTPS = "false",
+  UI_HOST = "localhost",
+  UI_PORT = "3000",
 
   // MongoDB
   DB_USER = "",
@@ -48,7 +51,7 @@ export const MONGODB_URL = `mongodb://${
 
 export const FULL_APP_LINK = `${
   HTTPS === "true" ? "https" : "http"
-}:://${APP_LINK}${APP_PORT && `:${APP_PORT}`}`;
+}:://${UI_HOST}${UI_PORT && `:${UI_PORT}`}`;
 
 export const getTransportConfig = () => {
   return {
