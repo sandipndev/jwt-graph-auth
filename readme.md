@@ -1,4 +1,4 @@
-# Complete Authentication System Curated for Node.js
+# Complete Authentication and Authorization System Curated for Node.js
 
 ### Features:
 
@@ -10,6 +10,11 @@
 - [x] Forgot password (send email to registered email)
 - [x] Support for multiple sessions and single-session
 - [x] Revoke accesstoken and refreshtoken (Log me out from all devices)
+
+### Developer Features:
+
+- [x] Has Middlewares to check if user is logged in, verified
+- [x] Has Middleware, courtesy of [Thunder80](https://github.com/Thunder80), to check if user has a specific OAuth Scope
 
 ### Bucket List:
 
