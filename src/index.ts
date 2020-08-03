@@ -3,8 +3,9 @@ import express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
-import { MONGODB_URL, APP_PORT, IN_PROD } from "./config";
+import { FULL_APP_LINK, MONGODB_URL, APP_PORT, IN_PROD } from "./config";
 import { UserResolver, UpdatePasswords } from "./resolvers";
 import { handleRefreshToken } from "./api";
 
@@ -20,6 +21,7 @@ import "reflect-metadata";
 
   const app = express();
   app.use(cookieParser());
+  app.use(cors({ origin: FULL_APP_LINK, credentials: true }));
 
   app.disable("x-powered-by");
   app.disable("etag");

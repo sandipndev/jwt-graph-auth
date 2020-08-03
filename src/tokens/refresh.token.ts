@@ -27,7 +27,6 @@ export const createRefreshToken = async (user: IUser): Promise<string> => {
 export const addRefreshToken = async (res: Response, user: IUser) => {
   res.cookie("jid", await createRefreshToken(user), {
     httpOnly: true,
-    sameSite: "strict",
     path: "/refresh_token",
   });
 };

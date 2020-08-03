@@ -44,7 +44,7 @@ export const MONGODB_URL = `mongodb://${DB_USER}:${DB_PASS}@${DB_HOST}:${DB_PORT
 
 export const FULL_APP_LINK = `${
   HTTPS === "true" ? "https" : "http"
-}:://${APP_LINK}:${APP_PORT}`;
+}:://${APP_LINK}${APP_PORT && `:${APP_PORT}`}`;
 
 export const getTransportConfig = () => {
   return {
