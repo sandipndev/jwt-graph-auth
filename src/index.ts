@@ -33,6 +33,7 @@ import "reflect-metadata";
       resolvers: [UserResolver, UpdatePasswords],
     }),
     context: ({ req, res }: apolloCtx): apolloCtx => ({ req, res }),
+    introspection: !IN_PROD,
     playground: IN_PROD
       ? false
       : {
