@@ -51,7 +51,7 @@ export const MONGODB_URL = `mongodb://${
 
 export const FULL_APP_LINK = `${
   HTTPS === "true" ? "https" : "http"
-}:://${UI_HOST}${UI_PORT && `:${UI_PORT}`}`;
+}://${UI_HOST}${UI_PORT && `:${UI_PORT}`}`;
 
 export const getTransportConfig = () => {
   return {
