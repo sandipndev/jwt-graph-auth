@@ -91,7 +91,7 @@ class UserResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async logout(@Ctx() { res }: apolloCtx): Promise<boolean> {
-    res.clearCookie("jid");
+    res.clearCookie("jid", { path: "/refresh_token" });
     return true;
   }
 

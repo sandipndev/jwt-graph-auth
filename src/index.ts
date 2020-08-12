@@ -43,7 +43,7 @@ import "reflect-metadata";
           },
         },
   });
-  apolloServer.applyMiddleware({ app });
+  apolloServer.applyMiddleware({ app, cors: false });
 
   app.listen(APP_PORT, () => console.log("🚀 Apollo Server - Port", APP_PORT));
 })().catch(console.error);
